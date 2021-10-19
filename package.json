@@ -1,0 +1,20 @@
+{
+  "name": "nft_generator",
+  "version": "1.0.0",
+  "description": "CLI tool to generate a NFT collection",
+  "main": "src/main.ts",
+  "scripts": {
+    "dev": "ts-node src/main.ts",
+    "build": "tsc --build",
+    "package": "pkg dist/main.js --no-bytecode --public-packages '*' --public --target host --output bin/main"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^16.11.1",
+    "pkg": "^5.3.3",
+    "prettier": "2.4.1",
+    "ts-node": "^10.3.0",
+    "typescript": "^4.4.4"
+  }
+}

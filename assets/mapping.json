@@ -1,0 +1,16 @@
+{
+    "background": {
+        "green.png": 10,
+        "purple.png": 40,
+        "red.png": 50
+    },
+    "object": {
+        "red_circle.png": 10,
+        "striped_triangle.png": 90
+    },
+    "text": {
+        "greek.png": 10,
+        "hello_world.png": 40,
+        "testing.png": 50
+    }
+}
