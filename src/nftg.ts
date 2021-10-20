@@ -12,10 +12,15 @@ program.helpOption(true);
 
 program.command('attributes')
     .argument('<n>', 'The number of attribute lists to generate.', toInt)
-    .argument('[root]', 'The directory containing the mapping.json file.', '.')
+    .argument('[dir]', 'The project directory.', '.')
     .option('--no-unique', 'Allow to generate the same random list of attributes many times.')
-    .description('Generate an attributes.json file containing <n> random lists of traits in [root] folder.')
+    .description('Generate an attributes.json file containing <n> random lists of traits in [dir] folder.')
     .action(attributes)
+
+program.command('images')
+    .argument('[dir]', 'The project directory.', '.')
+    .description('Generate images from the attributes.json file contained in [dir] folder.')
+    .action(images)
 
 program.parse(process.argv);
 
