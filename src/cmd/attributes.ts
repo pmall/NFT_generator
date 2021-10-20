@@ -22,7 +22,9 @@ const paths = {
     traits: `./traits`,
 }
 
-export const attributes = (n: number, root: string, options: { unique: boolean }) => {
+export const attributes = (n: number, dir: string, options: { unique: boolean }) => {
+    const root = dir.replace(/\/+$/, '')
+
     const message = options.unique
         ? `Generating ${n} unique random lists of traits in ${root}/attributes.json`
         : `Generating ${n} non unique random lists of traits in ${root}/attributes.json`
