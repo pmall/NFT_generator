@@ -5,7 +5,8 @@
   "main": "src/nftg.ts",
   "scripts": {
     "dev": "ts-node src/nftg.ts",
-    "build": "tsc --build"
+    "build": "tsc --build --clean",
+    "prepare": "npm run build"
   },
   "author": "",
   "license": "MIT",
