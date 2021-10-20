@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { Command, InvalidArgumentError } from 'commander';
+import { images } from './cmd/images';
 import { attributes } from './cmd/attributes';
 
 const program = new Command()
