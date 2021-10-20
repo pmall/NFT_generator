@@ -1,23 +1,34 @@
 #!/usr/bin/env node
 import fs from 'fs'
 
-const num = 9
-const root = 'assets'
-
-const files = {
-    mapping: `./${root}/mapping.json`,
-    attributes: `./${root}/images/attributes.csv`
+if (process.argv.length < 3) {
+    throw new Error('no number of images to generate')
 }
 
-if (!fs.existsSync(files.mapping)) {
-    throw new Error(`no ${files.mapping} file found in current working directory`)
+const num = parseInt(process.argv[2])
+const root = process.argv[3] ?? '.'
+
+if (num === NaN) {
+    throw new Error('number of image must be an integer')
 }
 
-const raw = fs.readFileSync(files.mapping, 'utf8')
+process.chdir(root)
+
+const paths = {
+    mapping: `./mapping.json`,
+    attributes: `./attributes.json`,
+    traits: `./traits`,
+}
+
+if (!fs.existsSync(paths.mapping)) {
+    throw new Error(`no ${paths.mapping} file found`)
+}
+
+const raw = fs.readFileSync(paths.mapping, 'utf8')
 
 const mapping = JSON.parse(raw)
 
-// format the mapping into traits
+// format & validate the traits
 type Trait = {
     type: string
     values: Array<{
@@ -30,38 +41,31 @@ type Trait = {
 const traits: Trait[] = []
 
 for (const dir in mapping) {
+    let sump = 0
+
     const type = dir.replace('_', ' ')
 
     const values = []
 
     for (const file in mapping[dir]) {
+        sump += mapping[dir][file]
+
         values.push({
             value: file.replace('_', ' ').replace('.png', ''),
             p: mapping[dir][file],
-            file: ['.', root, 'attributes', dir, file].join('/'),
+            file: `${paths.traits}/${dir}/${file}`,
         })
     }
 
-    traits.push({ type, values })
-}
-
-// ensure traits are valid
-for (const { type, values } of traits) {
     if (values.length === 0) {
         throw new Error(`trait ${type} has no value`)
     }
 
-    for (const { file } of values) {
-        if (!fs.existsSync(file)) {
-            throw new Error(`trait ${type}: file does not exist (${file})`)
-        }
-    }
-
-    const sump = values.reduce((acc, { p }) => acc + p, 0)
-
     if (sump != 100) {
         throw new Error(`trait ${type}: sum of probabilities must be 100 (${sump})`)
     }
+
+    traits.push({ type, values })
 }
 
 // ensure there is more combinations than expected numbers.
@@ -79,37 +83,40 @@ type Attribute = {
     file: string
 }
 
-const stats: Record<string, Record<string, number>> = {}
-
-for (const { type, values } of traits) {
-    stats[type] = {}
-    for (const { value } of values) {
-        stats[type][value] = 0
-    }
-}
-
 const seen: Record<string, boolean> = {}
 
-const uniq = (): Attribute[] => {
-    const rs = []
+const newIndexes = (): number[] => {
+    const is = []
 
     for (const { values } of traits) {
-        rs.push(choice(values.map(({ p }) => p)))
+        is.push(choice(values.map(({ p }) => p)))
     }
 
-    const key = rs.join(':')
+    return is
+}
+
+const uniqIndexes = (): number[] => {
+    const is = newIndexes()
+
+    const key = is.join(':')
 
     if (seen[key] === true) {
-        return uniq()
+        return uniqIndexes()
     }
 
     seen[key] = true
+
+    return is
+}
+
+const newAttributeList = (uniq: boolean = false): Attribute[] => {
+    const is = uniq ? uniqIndexes() : newIndexes()
 
     const xs = []
 
     for (let i = 0; i < traits.length; i++) {
         const type = traits[i].type
-        const value = traits[i].values[rs[i]]
+        const value = traits[i].values[is[i]]
 
         xs.push({ type, ...value })
     }
@@ -120,14 +127,11 @@ const uniq = (): Attribute[] => {
 const attributes: Attribute[][] = []
 
 for (let i = 0; i < num; i++) {
-    const xs = uniq()
-
-    for (const x of xs) stats[x.type][x.value]++
-
-    attributes.push(xs)
+    attributes.push(newAttributeList(true))
 }
 
-console.log(stats)
+// write the attribute file
+fs.writeFileSync(paths.attributes, JSON.stringify(attributes, null, 2));
 
 // random weighted
 function choice(weights: number[]): number {
