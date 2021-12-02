@@ -8,7 +8,6 @@ type Attribute = {
 
 const paths = {
     attributes: `./attributes.json`,
-    traits: `./traits`,
     images: `./images`,
 }
 
