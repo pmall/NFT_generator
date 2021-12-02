@@ -4,6 +4,7 @@ import { Command, InvalidArgumentError } from 'commander';
 import { stats } from './cmd/stats';
 import { images } from './cmd/images';
 import { pinata } from './cmd/pinata';
+import { metadata } from './cmd/metadata';
 import { attributes } from './cmd/attributes';
 
 dotenv.config()
@@ -35,8 +36,14 @@ program.command('images')
 
 program.command('pinata')
     .argument('[dir]', 'The project directory.', '.')
-    .description('Upload images contained in [dir]/images folder to pinata.')
+    .description('Upload images to pinata.')
     .action(pinata)
+
+program.command('metadata')
+    .argument('[name]', 'The project name.', '')
+    .argument('[dir]', 'The project directory.', '.')
+    .description('Generate metadata files from the attributes.json file and the cids.json file contained in [dir] folder.')
+    .action(metadata)
 
 program.parse(process.argv);
 
