@@ -1,14 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 import sharp from 'sharp'
+import { paths } from '../config'
 
 type Attribute = {
     file: string
-}
-
-const paths = {
-    attributes: `./attributes.json`,
-    images: `./images`,
 }
 
 export const images = async (dir: string) => {

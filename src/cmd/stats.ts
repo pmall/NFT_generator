@@ -1,15 +1,10 @@
 import fs from 'fs'
-import path from 'path'
+import { paths } from '../config'
 
 type Attribute = {
     type: string
     value: string
     file: string
-}
-
-const paths = {
-    attributes: `./attributes.json`,
-    stats: `./stats.json`,
 }
 
 export const stats = async (dir: string) => {

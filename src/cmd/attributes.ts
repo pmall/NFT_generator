@@ -1,4 +1,5 @@
 import fs from 'fs'
+import { paths } from '../config'
 
 type Trait = {
     type: string
@@ -14,12 +15,6 @@ type Attribute = {
     value: string
     p: number
     file: string
-}
-
-const paths = {
-    mapping: `./mapping.json`,
-    attributes: `./attributes.json`,
-    traits: `./traits`,
 }
 
 export const attributes = (n: number, dir: string, options: { unique: boolean }) => {
