@@ -1,8 +1,12 @@
 #!/usr/bin/env node
+import dotenv from 'dotenv'
 import { Command, InvalidArgumentError } from 'commander';
 import { stats } from './cmd/stats';
 import { images } from './cmd/images';
+import { pinata } from './cmd/pinata';
 import { attributes } from './cmd/attributes';
+
+dotenv.config()
 
 const program = new Command()
 
@@ -28,6 +32,11 @@ program.command('images')
     .argument('[dir]', 'The project directory.', '.')
     .description('Generate images from the attributes.json file contained in [dir] folder.')
     .action(images)
+
+program.command('pinata')
+    .argument('[dir]', 'The project directory.', '.')
+    .description('Upload images contained in [dir]/images folder to pinata.')
+    .action(pinata)
 
 program.parse(process.argv);
 

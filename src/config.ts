@@ -1,4 +1,5 @@
 export const paths = {
+    cids: './cids.json',
     stats: './stats.json',
     traits: './traits',
     images: './images',
