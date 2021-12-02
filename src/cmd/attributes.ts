@@ -80,10 +80,10 @@ export const attributes = (n: number, dir: string, options: { unique: boolean })
     }
 
     // make num random images & compute stats
-    const attributes: Attribute[][] = []
+    const attributes: Record<string, Attribute[]> = {}
 
     for (let i = 0; i < n; i++) {
-        attributes.push(newAttributeList(traits, options.unique))
+        attributes[i + 1] = newAttributeList(traits, options.unique)
     }
 
     // write the attribute file

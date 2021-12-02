@@ -25,7 +25,7 @@ export const images = async (dir: string) => {
 
     const raw = fs.readFileSync(paths.attributes, 'utf8')
 
-    const attributes: Attribute[][] = JSON.parse(raw)
+    const attributes: Record<string, Attribute[]> = JSON.parse(raw)
 
     // remove all .png files of the images folder
     const files = fs.readdirSync(paths.images)
@@ -37,7 +37,7 @@ export const images = async (dir: string) => {
     }
 
     // generate one image per attributes
-    for (let i = 0; i < attributes.length; i++) {
+    for (const i in attributes) {
         const xs = attributes[i]
         const x = xs.shift()
 
@@ -45,6 +45,6 @@ export const images = async (dir: string) => {
 
         sharp(x.file)
             .composite(xs.map(({ file }) => ({ input: file })))
-            .toFile(`${paths.images}/${i + 1}.png`)
+            .toFile(`${paths.images}/${i}.png`)
     }
 }
