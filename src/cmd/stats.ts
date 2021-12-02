@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 import { paths } from '../config'
 
 type Attribute = {
@@ -10,7 +11,7 @@ type Attribute = {
 export const stats = async (dir: string) => {
     const root = dir.replace(/\/+$/, '')
 
-    console.log(`Computing stats from ${root}/attributes.json`)
+    console.log(`Computing stats from ${path.join(root, paths.attributes)}`)
 
     process.chdir(root)
 
@@ -43,4 +44,6 @@ export const stats = async (dir: string) => {
     }
 
     fs.writeFileSync(paths.stats, JSON.stringify(stats, null, 2));
+
+    console.log(`Stats computed into ${path.join(root, paths.stats)}`)
 }

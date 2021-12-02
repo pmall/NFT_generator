@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 import { paths } from '../config'
 
 type Trait = {
@@ -20,11 +21,11 @@ type Attribute = {
 export const attributes = (n: number, dir: string, options: { unique: boolean }) => {
     const root = dir.replace(/\/+$/, '')
 
-    const message = options.unique
-        ? `Generating ${n} unique random lists of traits in ${root}/attributes.json`
-        : `Generating ${n} non unique random lists of traits in ${root}/attributes.json`
+    const message1 = options.unique
+        ? `Generating ${n} unique random lists of traits from ${path.join(dir, paths.mapping)}`
+        : `Generating ${n} non unique random lists of traits from ${path.join(dir, paths.mapping)}`
 
-    console.log(message)
+    console.log(message1)
 
     process.chdir(root)
 
@@ -83,6 +84,12 @@ export const attributes = (n: number, dir: string, options: { unique: boolean })
 
     // write the attribute file
     fs.writeFileSync(paths.attributes, JSON.stringify(attributes, null, 2));
+
+    const message2 = options.unique
+        ? `${n} unique random lists of traits generated in ${path.join(dir, paths.attributes)}`
+        : `${n} non unique random lists of traits generated in ${path.join(dir, paths.attributes)}`
+
+    console.log(message2)
 }
 
 // functions for generating lists

@@ -10,7 +10,7 @@ type Attribute = {
 export const images = async (dir: string) => {
     const root = dir.replace(/\/+$/, '')
 
-    console.log(`Generating images from ${root}/attributes.json`)
+    console.log(`Generating images from ${path.join(root, paths.attributes)}`)
 
     process.chdir(root)
 
@@ -42,4 +42,6 @@ export const images = async (dir: string) => {
             .composite(xs.map(({ file }) => ({ input: file })))
             .toFile(`${paths.images}/${i}.png`)
     }
+
+    console.log(`${Object.values(attributes).length} images generated into ${path.join(root, paths.images)}`)
 }
